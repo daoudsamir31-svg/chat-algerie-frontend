@@ -1,5 +1,5 @@
 import Sidebar from "../components/sidebar/Sidebar";
-import Navbar from "../components/navbar/Navbar";
+import Navbar from "../components/Navbar/Navbar";
 import OnlineUsers from "../components/users/OnlineUsers";
 
 export default function Home() {
