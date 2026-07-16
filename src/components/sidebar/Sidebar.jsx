@@ -18,7 +18,7 @@ const menu = [
   { icon: Settings, title: "Settings" },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ active, setActive }) {
   return (
     <aside
       style={{
@@ -31,12 +31,7 @@ export default function Sidebar() {
         gap: 10,
       }}
     >
-      <h2
-        style={{
-          color: "#00A651",
-          marginBottom: 20,
-        }}
-      >
+      <h2 style={{ color: "#00A651", marginBottom: 20 }}>
         🇩🇿 Chat Algerie X
       </h2>
 
@@ -46,6 +41,7 @@ export default function Sidebar() {
         return (
           <div
             key={item.title}
+            onClick={() => setActive(item.title)}
             style={{
               display: "flex",
               alignItems: "center",
@@ -53,6 +49,8 @@ export default function Sidebar() {
               padding: 12,
               borderRadius: 12,
               cursor: "pointer",
+              background:
+                active === item.title ? "#00A651" : "transparent",
               transition: "0.3s",
             }}
           >
