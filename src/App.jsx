@@ -1,5 +1,5 @@
 import {
-  BrowserRouter,
+  HashRouter,
   Routes,
   Route,
   Navigate,
@@ -26,7 +26,7 @@ function ProtectedRoute({ children }) {
 function App() {
 
   return (
-    <BrowserRouter>
+    <HashRouter>
 
       <Routes>
 
@@ -56,7 +56,7 @@ function App() {
 
       </Routes>
 
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
