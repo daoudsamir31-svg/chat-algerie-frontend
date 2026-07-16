@@ -1,10 +1,9 @@
-import { Bell, Search, UserCircle, LogIn, UserPlus } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Bell, Search, UserCircle, LogOut } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
 export default function Navbar() {
 
-  const { token } = useAuth();
+  const { user, logout } = useAuth();
 
   return (
     <div
@@ -19,84 +18,102 @@ export default function Navbar() {
       }}
     >
 
-      <h2 style={{ color:"#00A651", margin:0 }}>
+      {/* Logo */}
+      <h2
+        style={{
+          color: "#00A651",
+          margin: 0,
+        }}
+      >
         🇩🇿 Chat Algerie X
       </h2>
 
 
+      {/* Search */}
       <div
         style={{
-          display:"flex",
-          alignItems:"center",
-          background:"#1f2937",
-          padding:"10px 15px",
-          borderRadius:"30px",
-          width:"350px"
+          display: "flex",
+          alignItems: "center",
+          background: "#1f2937",
+          padding: "10px 15px",
+          borderRadius: "30px",
+          width: "350px",
         }}
       >
-        <Search color="white" size={18}/>
+
+        <Search color="white" size={18} />
 
         <input
           placeholder="Rechercher..."
           style={{
-            marginLeft:10,
-            border:"none",
-            outline:"none",
-            background:"transparent",
-            color:"white",
-            width:"100%"
+            marginLeft: 10,
+            border: "none",
+            outline: "none",
+            background: "transparent",
+            color: "white",
+            width: "100%",
           }}
         />
 
       </div>
 
 
+      {/* User area */}
       <div
         style={{
-          display:"flex",
-          alignItems:"center",
-          gap:"20px",
-          color:"white"
+          display: "flex",
+          alignItems: "center",
+          gap: "15px",
+          color: "white",
         }}
       >
 
-        {token ? (
-
-          <>
-            <Bell />
-
-            <UserCircle size={36}/>
-
-            <div>
-              <strong>Samir</strong>
-              <br/>
-              <small style={{color:"#00A651"}}>
-                🟢 En ligne
-              </small>
-            </div>
-          </>
-
-        ) : (
-
-          <>
-            <Link 
-              to="/login"
-              style={{color:"white",textDecoration:"none"}}
-            >
-              <LogIn size={20}/> Login
-            </Link>
+        <Bell size={22} />
 
 
-            <Link
-              to="/register"
-              style={{color:"#00A651",textDecoration:"none"}}
-            >
-              <UserPlus size={20}/> Register
-            </Link>
+        <UserCircle size={36} />
 
-          </>
 
-        )}
+        <div>
+
+          <strong>
+            {user?.name || "Utilisateur"}
+          </strong>
+
+          <br />
+
+          <small
+            style={{
+              color:"#00A651"
+            }}
+          >
+            🟢 En ligne
+          </small>
+
+        </div>
+
+
+        <button
+          onClick={logout}
+          style={{
+            display:"flex",
+            alignItems:"center",
+            gap:"5px",
+            background:"#dc2626",
+            color:"white",
+            border:"none",
+            padding:"8px 12px",
+            borderRadius:"8px",
+            cursor:"pointer"
+          }}
+        >
+
+          <LogOut size={16} />
+
+          Logout
+
+        </button>
+
 
       </div>
 
