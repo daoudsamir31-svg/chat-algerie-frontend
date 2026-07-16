@@ -1,34 +1,90 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
+import { useAuth } from "../context/AuthContext";
+
+const socket = io(
+  "https://chat-algerie-backend.onrender.com"
+);
 
 export default function ChatWindow() {
 
+  const { user } = useAuth();
+
   const [message, setMessage] = useState("");
 
-  const [messages, setMessages] = useState([
-    {
-      text: "مرحبا بكم في Chat Algerie 🇩🇿",
-      user: "Admin"
-    }
-  ]);
+  const [messages, setMessages] = useState([]);
 
 
-  function sendMessage() {
-
-    if (!message.trim()) return;
+  const room_id = 1;
 
 
-    setMessages([
-      ...messages,
-      {
-        text: message,
-        user: "Moi"
+  useEffect(() => {
+
+    if (!user) return;
+
+
+    socket.emit(
+      "user_online",
+      user.id
+    );
+
+
+    socket.emit(
+      "join_room",
+      room_id
+    );
+
+
+    socket.on(
+      "receive_message",
+      (msg)=>{
+
+        setMessages((prev)=>[
+          ...prev,
+          msg
+        ]);
+
       }
-    ]);
+    );
+
+
+    return ()=>{
+
+      socket.off(
+        "receive_message"
+      );
+
+    };
+
+
+  }, [user]);
+
+
+
+  function sendMessage(){
+
+
+    if(!message.trim()) return;
+
+
+    socket.emit(
+      "send_room_message",
+      {
+
+        user_id:user.id,
+
+        room_id,
+
+        content:message
+
+      }
+    );
 
 
     setMessage("");
 
   }
+
 
 
   return (
@@ -41,6 +97,7 @@ export default function ChatWindow() {
         background:"#111827",
         borderRadius:"15px",
         padding:"20px",
+        color:"white"
       }}
     >
 
@@ -50,13 +107,11 @@ export default function ChatWindow() {
       </h2>
 
 
-      {/* Messages */}
 
       <div
         style={{
           flex:1,
-          overflowY:"auto",
-          marginBottom:"15px",
+          overflowY:"auto"
         }}
       >
 
@@ -65,20 +120,14 @@ export default function ChatWindow() {
           <div
             key={index}
             style={{
-              marginBottom:"10px",
               background:"#1f2937",
+              marginBottom:"10px",
               padding:"10px",
-              borderRadius:"10px",
+              borderRadius:"10px"
             }}
           >
 
-            <strong>
-              {msg.user}
-            </strong>
-
-            <br />
-
-            {msg.text}
+            {msg.content}
 
           </div>
 
@@ -88,12 +137,11 @@ export default function ChatWindow() {
       </div>
 
 
-      {/* Input */}
 
       <div
         style={{
           display:"flex",
-          gap:"10px",
+          gap:"10px"
         }}
       >
 
@@ -101,7 +149,16 @@ export default function ChatWindow() {
 
           value={message}
 
-          onChange={(e)=>setMessage(e.target.value)}
+          onChange={
+            (e)=>setMessage(e.target.value)
+          }
+
+          onKeyDown={
+            (e)=>{
+              if(e.key==="Enter")
+                sendMessage();
+            }
+          }
 
           placeholder="اكتب رسالتك..."
 
@@ -109,33 +166,21 @@ export default function ChatWindow() {
             flex:1,
             padding:"12px",
             borderRadius:"10px",
-            border:"none",
-            outline:"none",
-          }}
-
-          onKeyDown={(e)=>{
-
-            if(e.key==="Enter")
-              sendMessage();
-
+            border:"none"
           }}
 
         />
 
 
         <button
-
           onClick={sendMessage}
-
           style={{
             background:"#00A651",
             color:"white",
             border:"none",
-            padding:"0 20px",
-            borderRadius:"10px",
-            cursor:"pointer",
+            padding:"10px 20px",
+            borderRadius:"10px"
           }}
-
         >
 
           إرسال
