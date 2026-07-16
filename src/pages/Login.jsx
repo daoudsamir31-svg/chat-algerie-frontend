@@ -28,7 +28,7 @@ export default function Login() {
                 res.data.token
             );
 
-            navigate("/home");
+            navigate("/");
 
         } catch (err) {
 
