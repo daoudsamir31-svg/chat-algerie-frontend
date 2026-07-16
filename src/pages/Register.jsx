@@ -27,11 +27,14 @@ export default function Register() {
 
         } catch (err) {
 
-            setError(
-                err.response?.data?.message ||
-                "Registration failed"
-            );
+           console.log(err.response);
+console.log(err.response?.data);
+console.log(err);
 
+setError(
+    err.response?.data?.message ||
+    "Registration failed"
+);
         }
 
     }
